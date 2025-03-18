@@ -58,18 +58,43 @@ let h2Text = document.createTextNode('Total Amount')
 totalh2.appendChild(h2Text)
 totalDiv.appendChild(totalh2)
 
-// TO UPDATE THE TOTAL AMOUNT
-function amountUpdate(amount)
-{
-    let totalh4 = document.createElement('h4')
-    // let totalh4Text = document.createTextNode(amount)
-    let totalh4Text = document.createTextNode('Amount: Rs ' + amount)
-    totalh4Text.id = 'toth4'
-    totalh4.appendChild(totalh4Text)
-    totalDiv.appendChild(totalh4)
-    totalDiv.appendChild(buttonDiv)
-    console.log(totalh4);
+let finalAmount = 0;
+let originalAmount = 0;
+const COUPON_CODE = "SAVE50"; // Only one coupon
+
+function amountUpdate(amount) {
+    finalAmount = amount; // Update the current total
+    if (originalAmount === 0) originalAmount = amount; // Store original amount only once
+
+    totalDiv.innerHTML = ""; // Clear previous content
+
+    let totalh2 = document.createElement("h2");
+    let h2Text = document.createTextNode("Total Amount");
+    totalh2.appendChild(h2Text);
+    totalDiv.appendChild(totalh2);
+
+    let totalh4 = document.createElement("h4");
+    totalh4.id = "toth4";
+    let totalh4Text = document.createTextNode("Amount: Rs " + amount);
+    totalh4.appendChild(totalh4Text);
+    totalDiv.appendChild(totalh4);
+
+    totalDiv.appendChild(buttonDiv);
 }
+
+// Apply coupon code
+document.getElementById("applyCoupon").onclick = function () {
+    let couponCode = document.getElementById("couponCode").value.toUpperCase();
+    let newAmount = finalAmount;
+
+    if (couponCode === COUPON_CODE) {
+        newAmount = finalAmount - (finalAmount * 0.5); // Apply 50% discount
+        document.getElementById("couponMessage").innerText = `Coupon applied!`;
+        amountUpdate(newAmount);
+    } else {
+        document.getElementById("couponMessage").innerText = "Invalid coupon code.";
+    }
+};
 
 
 let buttonDiv = document.createElement('div')
